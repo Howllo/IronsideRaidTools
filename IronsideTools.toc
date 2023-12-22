@@ -1,0 +1,17 @@
+## Interface: 11500
+## Title: Ironside Raiding Tools |cFF00FF00v1.0.0 |r
+## Author: Eureka - Crusader Strike / Yureka - Illidan
+## Notes: Loot addon and DKP that intergrate with discord bot.
+## Version: 1.0.0
+## DefaultState: enabled
+## SavedVariables: IronsideRaidingToolsDB
+## X-License: All Rights Reserved
+
+# Core
+Core.lua
+
+# Data
+Data/Constants.lua
+
+# Interface
+Interface/DKPLogger.lua
