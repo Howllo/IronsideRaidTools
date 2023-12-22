@@ -203,6 +203,9 @@
         "GameFontHighlight",
         "Settings",
         "InterfaceOptions_AddCategory",
-        "GameFontHighlightLarge"
+        "GameFontHighlightLarge",
+        "ContainedAlertFrameMixin",
+        "DK",
+        "GameMenuFrame"
     ]
 }

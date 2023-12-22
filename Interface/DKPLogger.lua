@@ -1,28 +1,40 @@
 ---@type IRT
 local _, IRT = ...;
 
--- Create Main Frame
-local UIConfig = CreateFrame("Frame", "Ironside_Raid_Tool", UIParent, "EtherealFrameTemplate")
-UIConfig:SetSize(350, 460)
-UIConfig:SetPoint("CENTER", UIParent, "CENTER")
-UIConfig:SetMovable(true)
-UIConfig:EnableMouse(true)
-UIConfig:RegisterForDrag("LeftButton")
-UIConfig:SetScript("OnDragStart", UIConfig.StartMoving)
-UIConfig:SetScript("OnDragStop", UIConfig.StopMovingOrSizing)
-UIConfig:SetClampedToScreen(true)
+IRT.DKPLogger = {};
+local DKPLogger = IRT.DKPLogger;
+local DKPLog;
 
--- Create Title
-UIConfig.title = UIConfig:CreateFontString(nil, "OVERLAY")
-UIConfig.title:SetFontObject("GameFontHighlightLarge")
-UIConfig.title:SetPoint("LEFT", UIConfig.TitleBg, "LEFT", 120, 0)
-UIConfig.title:SetText("Ironside Raid Tool v" .. C_AddOns.GetAddOnMetadata("IronsideRaidTools", "Version"))
+function DKPLogger:Toggle()
+    local menu = DKPLog or DKPLogger:CreateMenu();
+    menu:SetShown(not menu:IsShown());
+end
 
--- Create Button
-UIConfig.button = CreateFrame("Button", nil, UIConfig, "GameMenuButtonTemplate")
-UIConfig.button:SetPoint("CENTER", UIConfig, "CENTER", 0, -200)
-UIConfig.button:SetSize(140, 40)
-UIConfig.button:SetText("Raid Tools")
+function DKPLogger:CreateMenu()
+    -- Create Main Frame
+    DKPLog = CreateFrame("Frame", "DKPLog", UIParent, "EtherealFrameTemplate")
+    DKPLog:SetSize(350, 460)
+    DKPLog:SetPoint("CENTER", UIParent, "CENTER")
+    DKPLog:SetMovable(true)
+    DKPLog:EnableMouse(true)
+    DKPLog:RegisterForDrag("LeftButton")
+    DKPLog:SetScript("OnDragStart", DKPLog.StartMoving)
+    DKPLog:SetScript("OnDragStop", DKPLog.StopMovingOrSizing)
+    DKPLog:SetClampedToScreen(true)
 
--- Hide Ironside Raid Tool on startup
-UIConfig:Hide()
+    -- Create Title
+    DKPLog.title = DKPLog:CreateFontString(nil, "OVERLAY")
+    DKPLog.title:SetFontObject("GameFontHighlightLarge")
+    DKPLog.title:SetPoint("LEFT", DKPLog.TitleBg, "LEFT", 120, 0)
+    DKPLog.title:SetText("Ironside Raid Tool v" .. C_AddOns.GetAddOnMetadata("IronsideRaidTools", "Version"))
+
+    -- Create Button
+    DKPLog.button = CreateFrame("Button", nil, DKPLog, "GameMenuButtonTemplate")
+    DKPLog.button:SetPoint("CENTER", DKPLog, "CENTER", 0, -200)
+    DKPLog.button:SetSize(140, 40)
+    DKPLog.button:SetText("Raid Tools")
+end
+
+function DKPLogger:GetMenu()
+    return DKPLog;
+end
