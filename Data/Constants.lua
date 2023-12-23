@@ -4,11 +4,8 @@ local _, IRT = ...;
 ---@class Data
 IRT.Data = IRT.Data or {}
 
----@class Cosntants
-IRT.Data.Constants = {
-    version = C_AddOns.GetAddOnMetadata("IronsideRaidTools", "Version"),
-    defaultFrameTitle = string.format("Ironside Raid Tools v%s", IRT.Data.Constants.version),
-    
+---@class Constants
+IRT.Data.Constants = {    
     Item_Slot = {
         INVTYPE_AMMO = { 0 },
         INVTYPE_HEAD = { 1 },
@@ -94,5 +91,8 @@ IRT.Data.Constants = {
         SHAMAN = 7,
         MAGE = 8,
         WARLOCK = 9,
-    }
+    },
+    
+    disableTextColor = "5F5F5F",
+    mainThemeColor = "00CCFF",
 };

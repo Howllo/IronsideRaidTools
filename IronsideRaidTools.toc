@@ -1,7 +1,7 @@
 ## Interface: 11500
 
-## Title: Ironside Raid Tools |cFF00FF00v1.0.0 |r
-## Author: Eureka - Crusader Strike / Yureka - Illidan
+## Title: Ironside Raid Tools |cFF00CCFFv1.0.0 |r
+## Author: Eureka - Crusader Strike / Yureka - Kil'Jaeden
 ## Notes: Loot, DKP, softres and with integration with Ironside DKP system, and more!
 ## Version: 1.0.0
 
@@ -9,11 +9,9 @@
 ## SavedVariables: IronsideRaidingToolsDB
 ## X-License: All Rights Reserved
 
-# Core
-Core.lua
-
 # Data
 Data/Constants.lua
+Data/DefaultState.lua
 
 # Src
 src/Settings.lua
@@ -24,4 +22,7 @@ src/Command.lua
 Interface/DKPLogger.lua
 
 # Libs
-Libaries.xml
+Libs.xml
+
+# Core
+Core.lua

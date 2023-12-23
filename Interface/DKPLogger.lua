@@ -26,7 +26,7 @@ function DKPLogger:CreateMenu()
     DKPLog.title = DKPLog:CreateFontString(nil, "OVERLAY")
     DKPLog.title:SetFontObject("GameFontHighlightLarge")
     DKPLog.title:SetPoint("LEFT", DKPLog.TitleBg, "LEFT", 120, 0)
-    DKPLog.title:SetText("Ironside Raid Tool v" .. C_AddOns.GetAddOnMetadata("IronsideRaidTools", "Version"))
+    DKPLog.title:SetText("Ironside Raid Tools (v%s)", IRT.version)
 
     -- Create Button
     DKPLog.button = CreateFrame("Button", nil, DKPLog, "GameMenuButtonTemplate")

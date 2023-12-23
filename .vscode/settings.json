@@ -206,6 +206,8 @@
         "GameFontHighlightLarge",
         "ContainedAlertFrameMixin",
         "DK",
-        "GameMenuFrame"
+        "GameMenuFrame",
+        "message",
+        "LootFrame"
     ]
 }

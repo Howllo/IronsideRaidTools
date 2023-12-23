@@ -1,8 +1,8 @@
 ---@type IRT
 local _, IRT = ...;
 
----@class Comamands
-IRT.Commands = IRT.Commands or {
+---@class Command
+IRT.Command = IRT.Command or {
     CommandDisc = {
         award = "Opens a award menu to start rolling on items, set timers, and discriptions, and to see who is top roll.",
         awardhistory = "Open a menu to show the award history of each raid.",
@@ -17,7 +17,6 @@ IRT.Commands = IRT.Commands or {
         cleardisenchanter = "Clear the primary disenchanter.",
         version = "Get the addons current version.",
     },
-
 
     Shorthand = {
         -- Awards
@@ -50,10 +49,10 @@ IRT.Commands = IRT.Commands or {
 
 --- Call a command and return the result.
 ---
-function Commands:call(msg)
-    return Commands:callCommand(msg);
+function IRT.Command:call(msg)
+    return IRT.Command:_sendCommand(msg);
 end
 
-function Commands:_sendCommand(msg)
-    IRT.Ace:Print(msg);
+function IRT.Command:_sendCommand(msg)
+    print("Called")
 end
