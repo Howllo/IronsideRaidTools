@@ -208,6 +208,9 @@
         "DK",
         "GameMenuFrame",
         "message",
-        "LootFrame"
+        "LootFrame",
+        "RAID",
+        "GameFontDisable",
+        "ID"
     ]
 }

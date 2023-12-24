@@ -9,6 +9,9 @@
 ## SavedVariables: IronsideRaidingToolsDB
 ## X-License: All Rights Reserved
 
+# Libs
+Libs.xml
+
 # Data
 Data/Constants.lua
 Data/DefaultState.lua
@@ -17,12 +20,11 @@ Data/DefaultState.lua
 src/Settings.lua
 src/Version.lua
 src/Command.lua
+src/ItemLink.lua
 
 # Interface
 Interface/DKPLogger.lua
-
-# Libs
-Libs.xml
+Interface/Award.lua
 
 # Core
 Core.lua

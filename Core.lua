@@ -13,7 +13,7 @@ IRT.clientVersion = 0;
 IRT.EF = nil;
 
 -- Ace
-IRT.Ace = LibStub("AceAddon-3.0"):NewAddon(IRT, IRT.name, "AceConsole-3.0", "AceEvent-3.0", "AceTimer-3.0")
+IRT.Ace = LibStub("AceAddon-3.0"):NewAddon(IRT, IRT.name, "AceConsole-3.0", "AceTimer-3.0", "AceEvent-3.0")
 
 ---Start the addon
 function IRT:init()
@@ -35,6 +35,7 @@ function IRT:init()
     end
     
     -- Load Modules
+    self.DKPLogger:openMenu();
 end
 
 IRT.Ace:RegisterChatCommand("irt", function(...)
@@ -43,6 +44,14 @@ end);
 
 IRT.Ace:RegisterChatCommand("ironside", function(...)
     IRT.Command:_sendCommand(...);
+end);
+
+IRT.Ace:RegisterChatCommand("ironsideraidtools", function(...)
+    IRT.Command:_sendCommand(...);
+end);
+
+IRT.Ace:RegisterChatCommand("rl", function(...)
+    ReloadUI();
 end);
 
 -- Addon Loaded Event

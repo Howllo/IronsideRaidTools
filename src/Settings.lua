@@ -4,7 +4,6 @@ local _, IRT = ...;
 IRT.Settings = {};
 
 function IRT.Settings:get(str)
-    print("Called")
     return IRT.Data.DefaultState[str];
 end
 

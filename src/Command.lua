@@ -31,7 +31,7 @@ IRT.Command = IRT.Command or {
         setbuffs = "sbf",
         
         -- DKP
-        dkp = "dk",
+        dkp = "dkp",
         export = "ex",
         import = "im",
 
@@ -45,14 +45,62 @@ IRT.Command = IRT.Command or {
         -- Version
         version = "v",
     },
+
+    Longhand = {
+        -- Awards
+        award = "award",
+        awardhistory = "awardhistory",
+
+        -- Soft Reserve
+        softreserve = "softreserve",
+
+        -- Raid Buffs
+        buffs = "buffs",
+        setbuffs = "setbuffs",
+        
+        -- DKP
+        dkp = "dkp",
+        export = "export",
+        import = "import",
+
+        -- Settings
+        settings = "settings",
+
+        -- Disenchanter
+        setdisenchanter = "setdisenchanter",
+        cleardisenchanter = "cleardisenchanter",
+
+        -- Version
+        version = "version",
+    },
+
+    Function_Mapping = {
+        dkp = function() IRT.DKPLogger:openMenu(); end,
+    }
 };
+
+--- Command
+local Command = IRT.Command;
 
 --- Call a command and return the result.
 ---
-function IRT.Command:call(msg)
-    return IRT.Command:_sendCommand(msg);
+function Command:call(msg)
+    return Command:_sendCommand(msg);
 end
 
-function IRT.Command:_sendCommand(msg)
-    print("Called")
+--- Send a command to the addon.
+---
+---@param msg any
+---@return void
+function Command:_sendCommand(msg)
+    local command = string.lower(msg);
+
+    if msg == nil or #msg == 0 then
+        print("Setting Menu")
+        return;
+    end
+
+    if command and msg == self.Shorthand[command] or msg == self.Longhand[command] then
+        self.Function_Mapping[command]();
+    end
 end
