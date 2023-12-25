@@ -1,5 +1,0 @@
----@type IRT
-local _, IRT = ...;
-
-IRT.Data = IRT.Data or {};
-

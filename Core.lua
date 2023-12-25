@@ -7,6 +7,7 @@ local GetAddOnMetadata = C_Addons and C_Addon.GetAddOnMetadata or GetAddOnMetada
 -- Variables
 IRT.name = addonName
 IRT.version = GetAddOnMetadata(IRT.name, "Version");
+IRT.spaceName = IRT.name:gsub("(%l)(%u)", "%1 %2")
 IRT.initialized = false;
 IRT.clientUIinterface = 0;
 IRT.clientVersion = 0;
@@ -26,8 +27,9 @@ function IRT:init()
 
     -- Welcome Message
     if(self.Settings:get("startMessage")) then
-        print(string.format("|cFF%sIronside Raid Tools v%s|r by Eureka@CrusaderStrike. Type |cFF%s/irt|r or |cFF%s/ironside|r to start!",
+        print(string.format("|cFF%s%s v%s|r start-up completed. Type |cFF%s/irt|r or |cFF%s/ironside|r to start! Created by Eureka, US-Crusader-Strike.",
         self.Data.Constants.mainThemeColor,
+        IRT.spaceName,
         self.version,
         self.Data.Constants.mainThemeColor,
         self.Data.Constants.mainThemeColor

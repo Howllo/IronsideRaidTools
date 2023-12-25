@@ -211,6 +211,10 @@
         "LootFrame",
         "RAID",
         "GameFontDisable",
-        "ID"
+        "ID",
+        "GroupLootFrame1",
+        "GroupLootFrame2",
+        "GroupLootContainer",
+        "InterfaceOptionsFrame_OpenToCategory"
     ]
 }
