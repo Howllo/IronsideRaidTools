@@ -27,6 +27,8 @@ Interface/DKPLogger.lua
 Interface/DKPManager.lua
 Interface/Award.lua
 Interface/GuildMOTD.lua
+Interface/LootFrameTooltip.lua
+Interface/Interface.lua
 
 # Core
 Core.lua

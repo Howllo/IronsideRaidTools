@@ -5,7 +5,12 @@ local _, IRT = ...;
 IRT.Data = IRT.Data or {}
 
 ---@class Constants
-IRT.Data.Constants = {    
+IRT.Data.Constants = {
+    ScrollingTable = {
+        ascending = 1,
+        descending = 2,
+    },
+
     Item_Slot = {
         INVTYPE_AMMO = { 0 },
         INVTYPE_HEAD = { 1 },

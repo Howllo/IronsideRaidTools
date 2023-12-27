@@ -215,6 +215,11 @@
         "GroupLootFrame1",
         "GroupLootFrame2",
         "GroupLootContainer",
-        "InterfaceOptionsFrame_OpenToCategory"
+        "InterfaceOptionsFrame_OpenToCategory",
+        "MasterLooterFrame",
+        "START",
+        "STA",
+        "CreateObjectPool",
+        "HandleModifiedItemClick"
     ]
 }

@@ -4,6 +4,9 @@ local addonName, IRT = ...;
 -- Metadata
 local GetAddOnMetadata = C_Addons and C_Addon.GetAddOnMetadata or GetAddOnMetadata;
 
+-- Load Guild
+IRT.GuildRoster = IRT.GuildRoster or C_GuildInfo.GuildRoster()
+
 -- Variables
 IRT.name = addonName
 IRT.version = GetAddOnMetadata(IRT.name, "Version");
@@ -35,9 +38,6 @@ function IRT:init()
         self.Data.Constants.mainThemeColor
     ))
     end
-    
-    -- Load Modules
-    self.DKPLogger:openMenu();
 end
 
 IRT.Ace:RegisterChatCommand("irt", function(...)
@@ -64,3 +64,6 @@ IRT.EF:SetScript("OnEvent", function(_, event, addon)
         IRT:init();
     end
 end);
+
+
+-- Check Guild

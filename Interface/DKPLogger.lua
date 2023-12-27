@@ -223,13 +223,15 @@ PlayerInRaid:RegisterEvent("GROUP_LEFT")
 PlayerInRaid:RegisterEvent("GROUP_ROSTER_UPDATE")
 PlayerInRaid:RegisterEvent("PLAYER_ENTERING_WORLD")
 PlayerInRaid:SetScript("OnEvent", function()
-    if IsInRaid() then
+    if(DKPLogger.DKPLog and IsInRaid()) then
         DKPLogInFront.SessionTime:SetText("Currently no sessions running.")
         DKPLogInFront.StartSession:Enable()
         DKPLogInFront.EndSession:Enable()
     else
-        DKPLogInFront.SessionTime:SetText("You are not current in a raid.")
-        DKPLogInFront.StartSession:Disable()
-        DKPLogInFront.EndSession:Disable()
+        if(DKPLogger.DKPLog) then
+            DKPLogInFront.SessionTime:SetText("You are not current in a raid.")
+            DKPLogInFront.StartSession:Disable()
+            DKPLogInFront.EndSession:Disable()
+        end
     end
 end)
