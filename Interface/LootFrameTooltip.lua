@@ -16,6 +16,7 @@ local defaultText = "Type an item ID and hit enter or\ndrag and drop an item to 
 local hasSelectedLoot = false;
 local lastRow = nil;
 local data = {};
+local openNormally = false;
 
 function IRTMasterLoot:build()
     if (self.MasterLootFrame) then
@@ -243,7 +244,7 @@ end
 function IRTMasterLoot:Toggle()
     local menu = self.MasterLootFrame or self:build();
     if (menu) then
-        if (menu:IsShown()) then
+        if (menu:IsShown() and openNormally) then
             menu:Hide();
         else
             menu:Show();
@@ -331,9 +332,9 @@ function IRTMasterLoot:createScrollableFrame(Frame)
             width = Frame.frame:GetWidth() - 50,
             align = "LEFT",
             color = {
-                r = 0.5,
-                g = 0.5,
-                b = 1.0,
+                r = 0,
+                g = 0,
+                b = 0,
                 a = 1.0
             },
             colorargs = nil,
@@ -416,6 +417,7 @@ LootingCorpse:SetScript("OnEvent", function(self, event)
         if(GetLootThreshold() >= 1 and IsInRaid()) then
         end
         IRTMasterLoot:Toggle();
+        openNormally = true;
     end
 
     if (event == "LOOT_CLOSED") then
@@ -426,5 +428,6 @@ LootingCorpse:SetScript("OnEvent", function(self, event)
             lastRow = nil;
             IRTMasterLoot.Table:ClearSelection();
         end
+        openNormally = false;
     end
 end)
