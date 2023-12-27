@@ -4,6 +4,7 @@ local _, IRT = ...;
 ---@class Command
 IRT.Command = IRT.Command or {
     CommandDisc = {
+        motd = "Toggle the guild MOTD popup.",
         award = "Opens a award menu to start rolling on items, set timers, and discriptions, and to see who is top roll.",
         awardhistory = "Open a menu to show the award history of each raid.",
         softreserve = "Opens a soft reserve menu to import from softres.it.",
@@ -19,6 +20,9 @@ IRT.Command = IRT.Command or {
     },
 
     Shorthand = {
+        -- Message of the Day
+        motd = "motd",
+
         -- Awards
         award = "aw",
         awardhistory = "awh",
@@ -47,6 +51,9 @@ IRT.Command = IRT.Command or {
     },
 
     Longhand = {
+        -- Message of the Day
+        motd = "motd",
+
         -- Awards
         award = "award",
         awardhistory = "awardhistory",
@@ -75,6 +82,15 @@ IRT.Command = IRT.Command or {
     },
 
     Function_Mapping = {
+
+        -- Message of the Day
+        motd = function() IRT.GuildMOTD:Toggle() end,
+
+        -- Awards Mapping
+        award = function() IRT.Award:Toggle() end,
+        aw = function() IRT.Award:Toggle() end,
+
+        -- DKP Settings
         dkp = function() IRT.DKPLogger:openMenu(); end,
     }
 };

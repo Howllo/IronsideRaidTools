@@ -8,6 +8,7 @@ IRT.AceGUI = IRT.AceGUI or LibStub("AceGUI-3.0");
 -- Variables
 local GuildMOTDFrame = nil;
 local isCombat = false;
+local motd = "" 
 
 function GuildMOTD:build(MOTD)
     if(not IRT.Settings:get("guildmotd")) then return end;
@@ -38,6 +39,9 @@ function GuildMOTD:Toggle(MOTD)
     local menu = IRT.GuildMOTDWindow or GuildMOTD:build(MOTD);
     if (not menu) then return; end
 
+    if(not MOTD and GetGuildRosterMOTD()) then
+        MOTD = GetGuildRosterMOTD();
+    end
     menu.MOTDText:SetText(MOTD);
     menu:Show();
 end
