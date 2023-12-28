@@ -43,15 +43,32 @@ function Interface:HexToRGBA(hex, a)
     return r, g, b, a
 end
 
+--- Update the party members table with the current party members.
+---
+---@return void
 function Interface:UpdatePartyMembers()
-    local partyMembers = {};
-    for i = 1, GetNumGroupMembers() do
-        local player = select(1, GetRaidRosterInfo(i));
-        tinsert(partyMembers, player);
+    if (IsInRaid() or IsInGroup()) then
+        local partyMembers = {};
+        for i = 1, GetNumGroupMembers() do
+            local player = select(1, GetRaidRosterInfo(i));
+            tinsert(partyMembers, player);
+        end
+
+        local function alphabeticalOrder(a, b)
+            return a < b;
+        end
+
+        sort(partyMembers, alphabeticalOrder)
+
+        self.partyMembers = partyMembers;
+    else
+        local lonerPlayer = select(1, UnitName("player"));
+        Interface.partyMembers = {lonerPlayer};
     end
-    self.partyMembers = partyMembers;
 end
 
+
+--- Initialize the Interface.
 function Interface:init()
     if self.initialized then return; end
 
@@ -68,9 +85,5 @@ OnPartyChange:RegisterEvent("GROUP_JOINED");
 OnPartyChange:RegisterEvent("GROUP_LEFT");
 OnPartyChange:RegisterEvent("PLAYER_ENTERING_WORLD");
 OnPartyChange:SetScript("OnEvent", function()
-    if (IsInRaid() or IsInGroup()) then
-        Interface:UpdatePartyMembers();
-    else
-        Interface.partyMembers = {{select(1, UnitName("player"))}};
-    end
+    Interface:UpdatePartyMembers();
 end)

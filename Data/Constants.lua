@@ -3,6 +3,7 @@ local _, IRT = ...;
 
 ---@class Data
 IRT.Data = IRT.Data or {}
+IRT.Data.Constants = IRT.Data.Constants or {}
 
 ---@class Constants
 IRT.Data.Constants = {
@@ -79,6 +80,8 @@ IRT.Data.Constants = {
         }
     },
 
+    AddonName = "Ironside",
+
     GroupLootAction = {
         PASS = 0,
         NEED = 1,
@@ -95,7 +98,21 @@ IRT.Data.Constants = {
         MAGE = 8,
         WARLOCK = 9,
     },
-    
-    disableTextColor = "5F5F5F",
+
     mainThemeColor = "00CCFF",
+    disableTextColor = "5F5F5F",
+
+    --[[
+        Used for the roll message.
+    ]]
+    defaultRollTimer = 30,
+    defaultRollMessageChannel = "RAID_WARNING",
+    defaultRollType = "roll",
+    defaultRollRoll = "roll",
+    defaultRollBid = "bid",
+    defaultRollEndBidMessage = function() return string.format("Bidding on %s has ended.", IRT.AwardRoll.itemBeingBiddedOn) end,
+    defaultPreMessage = "{star} Ironside:",
+    defaultRollMessage = function(itemLink) return string.format("%s Starting %s on the item %s", IRT.Data.Constants.defaultPreMessage,
+        IRT.Data.Constants.defaultRollType, itemLink) end,
+    defaultRollNoteMessage = "/roll 100 for MS, 99 for OS.",
 };

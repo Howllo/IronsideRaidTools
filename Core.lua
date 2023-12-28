@@ -41,6 +41,10 @@ function IRT:init()
     end
 end
 
+-- Initialize
+IRT.AwardRoll:init();
+IRT.Interface:init();
+
 IRT.Ace:RegisterChatCommand("irt", function(...)
     IRT.Command:_sendCommand(...);
 end);

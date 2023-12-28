@@ -1,30 +1,46 @@
 ---@type IRT
 local _, IRT = ...;
 
-IRT.AwardRolling = IRT.AwardRolling or {};
+IRT.Data.Constants = IRT.Data.Constants or {};
 
--- Shorting the name
-AwardRolling = IRT.AwardRolling;
+---@class AwardRoll
+IRT.AwardRoll = {
+    initialized = false,
+    currentRollTimer = nil,
+    itemBeingBiddedOn = nil,
+    highestRoll = 0,
+    highestRoller = nil,
+    highestRollerName = nil,
+    Rolling = false;
+    usingDKP = false;
+}
 
--- Variables
-IRT.AwardRolling.Rolling = false;
-IRT.AwardRolling.RollingItem = nil;
+---@type AwardRoll
+AwardRoll = IRT.AwardRoll;
 
-function IRT.AwardRolling:StartRolling(item)
+function AwardRoll:StartRolling(item)
     if not item then return; end
     if self.Rolling then return; end
+
+    -- Send message to chat channel
+    SendChatMessage(string.format("%s s%",
+        IRT.Data.Constants.defaultRollNoteMessage(),
+        IRT.Award.noteMessageToSend),
+        IRT.Data.Constants.defaultRollMessageChannel()
+    );
 
     self.Rolling = true;
     self.RollingItem = item;
 
     -- Send message
-    IRT:SendCommMessage("IRT_AWARDROLL", "START", "RAID");
-
-    -- Start rolling
-    self:StartRollingFrame();
+    --IRT:SendCommMessage("IRT_AWARDROLL", "START", "RAID");
 end
 
-function IRT.AwardRolling:StopRolling()
+function AwardRoll:CaptureRolls()
+
+end
+
+function AwardRoll:StopRolling()
     if not self.Rolling then return; end
 
     self.Rolling = false;
@@ -35,4 +51,17 @@ function IRT.AwardRolling:StopRolling()
 
     -- Stop rolling
     self:StopRollingFrame();
+end
+
+--- Set the total bid timer.
+function AwardRoll:SetTimer(timer)
+    if not timer then return; end
+    self.currentRollTimer = timer;
+end
+
+function AwardRoll:init()
+    if (self.initialized) then return end;
+
+    self.initialized = true;
+    self.currentRollTimer = IRT.Data.Constants.defaultRollTimer;
 end

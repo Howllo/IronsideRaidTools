@@ -221,6 +221,26 @@
         "STA",
         "CreateObjectPool",
         "HandleModifiedItemClick",
-        "SAY"
+        "SAY",
+        "ObjectPoolMixin",
+        "CreateTexturePool",
+        "AnimateTexCoords",
+        "UIDROPDOWNMENU_MAXLEVELS",
+        "ExecuteFrameScript",
+        "GameFontDisableSmallLeft",
+        "GameFontHighlightSmallLeft",
+        "DropDownMenuButtonMixin",
+        "TOOLTIP_DEFAULT_COLOR",
+        "TOOLTIP_DEFAULT_BACKGROUND_COLOR",
+        "GameFontNormalSmallLeft",
+        "VIDEO_QUALITY_LABEL6",
+        "TooltipBackdropTemplateMixin",
+        "SharedTooltip_SetBackdropStyle",
+        "GRAY_FONT_COLOR",
+        "GameTooltip_Hide",
+        "GameTooltip_AddErrorLine",
+        "FauxScrollFrame_Update",
+        "FauxScrollFrame_OnVerticalScroll",
+        "FauxScrollFrame_GetOffset"
     ]
 }
