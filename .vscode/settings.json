@@ -220,6 +220,7 @@
         "START",
         "STA",
         "CreateObjectPool",
-        "HandleModifiedItemClick"
+        "HandleModifiedItemClick",
+        "SAY"
     ]
 }

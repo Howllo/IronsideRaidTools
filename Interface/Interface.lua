@@ -1,7 +1,10 @@
 ---@type IRT
 local _, IRT = ...;
 
-IRT.Interface = IRT.Interface or {};
+IRT.Interface = {
+    initialized = false,
+    partyMembers = {},
+}
 local Interface = IRT.Interface;
 
 ---Converts a hex color to RGB.
@@ -39,3 +42,35 @@ function Interface:HexToRGBA(hex, a)
     local b = tonumber("0x" .. hex:sub(5,6)) / 255
     return r, g, b, a
 end
+
+function Interface:UpdatePartyMembers()
+    local partyMembers = {};
+    for i = 1, GetNumGroupMembers() do
+        local player = select(1, GetRaidRosterInfo(i));
+        tinsert(partyMembers, player);
+    end
+    self.partyMembers = partyMembers;
+end
+
+function Interface:init()
+    if self.initialized then return; end
+
+    self.initialized = true;
+
+    -- Get Party Members
+    Interface:UpdatePartyMembers();
+end
+
+-- On Party
+OnPartyChange = CreateFrame("Frame");
+OnPartyChange:RegisterEvent("GROUP_ROSTER_UPDATE");
+OnPartyChange:RegisterEvent("GROUP_JOINED");
+OnPartyChange:RegisterEvent("GROUP_LEFT");
+OnPartyChange:RegisterEvent("PLAYER_ENTERING_WORLD");
+OnPartyChange:SetScript("OnEvent", function()
+    if (IsInRaid() or IsInGroup()) then
+        Interface:UpdatePartyMembers();
+    else
+        Interface.partyMembers = {{select(1, UnitName("player"))}};
+    end
+end)

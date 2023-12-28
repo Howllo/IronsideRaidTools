@@ -17,10 +17,14 @@ Data/Constants.lua
 Data/DefaultState.lua
 
 # Src
+src/AwardRolls.lua
 src/Settings.lua
 src/Version.lua
 src/Command.lua
 src/ItemLink.lua
+src/Communication.lua
+src/DB.lua
+src/Softres.lua
 
 # Interface
 Interface/DKPLogger.lua
@@ -28,6 +32,7 @@ Interface/DKPManager.lua
 Interface/Award.lua
 Interface/GuildMOTD.lua
 Interface/LootFrameTooltip.lua
+Interface/AwardPopup.lua
 Interface/Interface.lua
 
 # Core

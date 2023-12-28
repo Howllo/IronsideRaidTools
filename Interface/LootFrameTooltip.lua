@@ -1,22 +1,33 @@
 ---@type IRT
 local _, IRT = ...;
 
-IRT.Award = {};
+---@type IRTMasterLoot
 IRTMasterLoot = IRT.Award;
 
--- Ace UI
 IRT.AceGUI = IRT.AceGUI or LibStub("AceGUI-3.0");
-
--- Scrolling Table
 IRT.ScrollingTable = IRT.ScrollingTable or LibStub("ScrollingTable");
 
--- Variables
-local defaultIcon = "Interface/Icons/INV_Misc_QuestionMark";
-local defaultText = "Type an item ID and hit enter or\ndrag and drop an item to the bar below!\nHitting okay may not work.";
-local hasSelectedLoot = false;
-local lastRow = nil;
-local data = {};
-local openNormally = false;
+---@class IRTMasterLoot
+IRT.IRTMasterLoot = {
+    defaultIcon = "Interface/Icons/INV_Misc_QuestionMark";
+    defaultText = "Type an item ID and hit enter or\ndrag and drop an item to the bar below!";
+    hasSelectedLoot = false;
+    lastRow = nil;
+    data = {};
+    openNormally = false;
+    MasterLootFrame = nil,
+    icon = nil,
+    textBox = nil,
+    awardButton = nil,
+    bidOnItemButton = nil,
+    passButton = nil,
+    Table = nil,
+    itemBeingBiddedOn = nil,
+    itemHighestBidder = nil,
+    highestBidderBid = nil,
+    isCurrentlyBidding = false,
+    hasUserUnselectDuringLock = false;
+};
 
 function IRTMasterLoot:build()
     if (self.MasterLootFrame) then
@@ -27,12 +38,16 @@ function IRTMasterLoot:build()
     self.MasterLootFrame:SetTitle(string.format("%s Award", IRT.spaceName));
     self.MasterLootFrame:SetLayout("Flow");
     self.MasterLootFrame:SetWidth(350);
-    self.MasterLootFrame:SetHeight(400);
+    self.MasterLootFrame:SetHeight(500);
     self.MasterLootFrame:EnableResize(false);
     self.MasterLootFrame:SetCallback("OnClose", function(widget) self.MasterLootFrame:Hide(); LootFrame:Hide() end);
 
     --[[ 
+
+
         Create the first frame for the icon and other information.
+
+
     ]]
     local FirstFrame = IRT.AceGUI:Create("SimpleGroup");
     FirstFrame:SetLayout("Flow");
@@ -51,19 +66,19 @@ function IRTMasterLoot:build()
         Add default icon for not having anything in the current slot.
     ]]
     self.icon = IRT.AceGUI:Create("Icon");
-    self.icon :SetImage(defaultIcon);
-    self.icon :SetImageSize(64, 64);
-    self.icon :SetWidth(64);
-    self.icon :SetHeight(64);
-    self.icon :SetCallback("OnEnter", function(widget)
+    self.icon:SetImage(IRT.IRTMasterLoot.defaultIcon);
+    self.icon:SetImageSize(64, 64);
+    self.icon:SetWidth(64);
+    self.icon:SetHeight(64);
+    self.icon:SetCallback("OnEnter", function(widget)
         GameTooltip:SetOwner(widget.frame, "ANCHOR_RIGHT");
-        GameTooltip:SetText(defaultText);
+        GameTooltip:SetText(IRT.IRTMasterLoot.defaultText);
         GameTooltip:Show();
     end);
     self.icon :SetCallback("OnLeave", function(widget)
         GameTooltip:Hide();
     end);
-    FirstFrame:AddChild(self.icon );
+    FirstFrame:AddChild(self.icon);
     self.icon.frame:SetPoint("LEFT", FirstFrame.frame, "LEFT", 50, 50)
     
     --[[ 
@@ -115,7 +130,11 @@ function IRTMasterLoot:build()
     SecondFrame:AddChild(self.textBox);
     
     --[[ 
+
+
         Create the third frame for the icon and other information.
+
+
     ]]
     local ThirdFrame = IRT.AceGUI:Create("SimpleGroup");
     ThirdFrame:SetLayout("Flow");
@@ -123,19 +142,65 @@ function IRTMasterLoot:build()
     ThirdFrame:SetHeight(64);
     self.MasterLootFrame:AddChild(ThirdFrame);
 
+    if not IRT.inteface.partyMembers then
+        IRT.Interface:UpdatePartyMembers();
+        print("Updating party members")
+    end
+
+    --[[
+        Who is the top bidder
+    ]]
+    IRTMasterLoot.topBidder = IRT.AceGUI:Create("Dropdown");
+    IRTMasterLoot.topBidder:SetWidth(100);
+    IRTMasterLoot.topBidder:SetHeight(30);
+    IRTMasterLoot.topBidder:SetList(IRT.Interface.partyMembers);
+    ThirdFrame:AddChild(IRTMasterLoot.topBidder);
+
+    --[[
+        Start bid button
+    ]]
+    IRTMasterLoot.startBidButton = IRT.AceGUI:Create("Button");
+    IRTMasterLoot.startBidButton:SetText("Start");
+    IRTMasterLoot.startBidButton:SetWidth(75);
+    IRTMasterLoot.startBidButton:SetHeight(20);
+    ThirdFrame:AddChild(IRTMasterLoot.startBidButton);
+
+    --[[
+        Stop Bid button
+    ]]
+    IRTMasterLoot.stopBidButton = IRT.AceGUI:Create("Button");
+    IRTMasterLoot.stopBidButton:SetText("Stop");
+    IRTMasterLoot.stopBidButton:SetWidth(75);
+    IRTMasterLoot.stopBidButton:SetHeight(20);
+    ThirdFrame:AddChild(IRTMasterLoot.stopBidButton);
+    IRTMasterLoot.stopBidButton:SetDisabled(true);
+
+    --[[ 
+
+
+        Create the fourth frame for the icon and other information.
+
+
+    ]]
+    local FourthFrame = IRT.AceGUI:Create("SimpleGroup");
+    FourthFrame:SetLayout("Flow");
+    FourthFrame:SetWidth(self.MasterLootFrame.frame:GetWidth() - 20);
+    FourthFrame:SetHeight(100);
+    self.MasterLootFrame:AddChild(FourthFrame);
+
     -- Spacer for the buttons.
     local spacer3 = IRT.AceGUI:Create("Label");
     spacer3:SetFullWidth(true);
     spacer3:SetHeight(30);
     spacer3.frame:Hide()
-    ThirdFrame:AddChild(spacer3);
+    FourthFrame:AddChild(spacer3);
 
     -- Spacer for the buttons.
     local spacer4 = IRT.AceGUI:Create("Label");
     spacer4:SetWidth(15);
     spacer4:SetHeight(30);
     spacer4.frame:Hide()
-    ThirdFrame:AddChild(spacer4);
+    FourthFrame:AddChild(spacer4);
 
     --[[ 
         Create the button to award the item.
@@ -147,7 +212,7 @@ function IRTMasterLoot:build()
     self.awardButton:SetCallback("OnClick", function(widget)
         self:awardItem();
     end);
-    ThirdFrame:AddChild(self.awardButton);
+    FourthFrame:AddChild(self.awardButton);
 
     --[[ 
         Check if the player is the master looter, if not disable award button.
@@ -171,7 +236,7 @@ function IRTMasterLoot:build()
     self.bidOnItemButton:SetCallback("OnClick", function(widget)
         self:bidOnItem();
     end);
-    ThirdFrame:AddChild(self.bidOnItemButton);
+    FourthFrame:AddChild(self.bidOnItemButton);
 
     --[[ 
         Create the button to passes on the item.
@@ -183,32 +248,72 @@ function IRTMasterLoot:build()
     self.passButton:SetCallback("OnClick", function(widget)
         self:passItem();
     end);
-    ThirdFrame:AddChild(self.passButton);
+    FourthFrame:AddChild(self.passButton);
 
     --[[
-        Fourth Frame for the scrollable frame.
+
+
+        FifthFrame Frame for the scrollable frame.
+
+        
     ]]
-    local FourthFrame = IRT.AceGUI:Create("SimpleGroup");
-    FourthFrame:SetLayout("Flow");
-    FourthFrame:SetWidth(self.MasterLootFrame.frame:GetWidth() - 20);
-    FourthFrame:SetHeight(200);
-    self.MasterLootFrame:AddChild(FourthFrame);
+    local FifthFrame = IRT.AceGUI:Create("SimpleGroup");
+    FifthFrame:SetLayout("Flow");
+    FifthFrame:SetWidth(self.MasterLootFrame.frame:GetWidth() - 20);
+    FifthFrame:SetHeight(200);
+    self.MasterLootFrame:AddChild(FifthFrame);
 
     --[[ 
         Create the scrollable frame for the items.
     ]]
-    self:createScrollableFrame(FourthFrame);
+    self:createScrollableFrame(FifthFrame);
+end
+
+--- Item that is currently being bidded on and the player that is currently the highest bidder.
+---
+---@param item string
+---@param nameOfHighestBidder string
+function IRTMasterLoot:ItemBiddingOn(item, nameOfHighestBidder, bidOrRoll)
+    IFT.IRTMasterLoot.itemBeingBiddedOn = item;
+    IFT.IRTMasterLoot.itemHighestBidder = nameOfHighestBidder;
+    IFT.IRTMasterLoot.highestBidderBid = bidOrRoll;
+end
+
+--- Set the start and stop button scripts.
+---
+---@return void
+function IRTMasterLoot:SetStartStopButtonScripts()
+    if(self.Table) then
+        IRTMasterLoot.startBidButton:SetCallback("OnClick", function(widget)
+            if(not IRT.IRTMasterLoot.itemBeingBiddedOn) then return; end
+            --IRT.AwardRolling:StartRolling(IRT.IRTMasterLoot.itemBeingBiddedOn);
+            IRTMasterLoot.startBidButton:SetDisabled(true);
+            IRTMasterLoot.stopBidButton:SetDisabled(false);
+            self.isCurrentlyBidding = true;
+        end);
+        IRTMasterLoot.stopBidButton:SetCallback("OnClick", function(widget)
+            --IRT.AwardRolling:StopRolling();
+            IRTMasterLoot.stopBidButton:SetDisabled(true);
+            IRTMasterLoot.startBidButton:SetDisabled(false);
+            self.isCurrentlyBidding = false;
+        end);
+    else
+        IRTMasterLoot.startBidButton:SetDisabled(true);
+        IRTMasterLoot.stopBidButton:SetDisabled(true);
+    end
 end
 
 --- Award Item to player
 ---
 ---@param itemID number
 ---@return void
-function IRTMasterLoot:awardItem(itemID)
-    print("IRTMasterLoot:awardItem(itemID)");
+function IRTMasterLoot:awardItem()
+    if(IRT.IRTMasterLoot.itemBeingBiddedOn) then
+        IRT.AwardPopup:Toggle()
+    end
 end
 
---- Bid on the current item thati s being bidded on.
+--- Bid on the current item that is being bidded on.
 ---
 ---@return void
 function IRTMasterLoot:bidOnItem()
@@ -227,10 +332,10 @@ end
 ---@return void
 function IRTMasterLoot:Clear()
     self.textBox:SetText("");
-    self.icon:SetImage(defaultIcon);
+    self.icon:SetImage(IRT.IRTMasterLoot.defaultIcon);
     self.icon :SetCallback("OnEnter", function(widget)
         GameTooltip:SetOwner(widget.frame, "ANCHOR_RIGHT");
-        GameTooltip:SetText(defaultText);
+        GameTooltip:SetText(IRT.IRTMasterLoot.defaultText);
         GameTooltip:Show();
     end);
     self.icon :SetCallback("OnLeave", function(widget)
@@ -244,7 +349,7 @@ end
 function IRTMasterLoot:Toggle()
     local menu = self.MasterLootFrame or self:build();
     if (menu) then
-        if (menu:IsShown() and openNormally) then
+        if (menu:IsShown() and IRT.IRTMasterLoot.openNormally) then
             menu:Hide();
         else
             menu:Show();
@@ -281,6 +386,8 @@ end
 ---@param text any
 ---@return boolean
 local function IsItemLink(text)
+    if(not text) then return false; end
+
     local linkType = string.match(text, "|H([^:]+)")
     return linkType == "item"
 end
@@ -292,7 +399,7 @@ end
 ---@return void
 function IRTMasterLoot:onItemDragEditBox(widget, event, text, icon, type)
     if(type ~= "ITEM_SELECTED") then
-        hasSelectedLoot = false;
+        IRT.IRTMasterLoot.hasSelectedLoot = false;
         self.Table:ClearSelection();
     end
 
@@ -330,6 +437,7 @@ function IRTMasterLoot:createScrollableFrame(Frame)
         {
             name = "Drop Item",
             width = Frame.frame:GetWidth() - 50,
+            height = 10,
             align = "LEFT",
             color = {
                 r = 0,
@@ -343,25 +451,50 @@ function IRTMasterLoot:createScrollableFrame(Frame)
         },
     }
     self.Table = IRT.ScrollingTable:CreateST(columns, 5, 20, nil, Frame.frame);
+    local dropTable = self.Table;
     self.Table.frame:SetPoint("TOP", Frame.frame, "TOP", 2, -30);
     self.Table:EnableSelection(true);
     self.Table:SetData({});
 
     self.Table:RegisterEvents({
-        ["OnClick"] = function(rowFrame, cellFrame, data, cols, row, realrow, column, scrollingTable, ...)
-            if((not hasSelectedLoot and lastRow ~= row) or (hasSelectedLoot and lastRow ~= row)) then
-                hasSelectedLoot = true;
-                if (row) then
-                    lastRow = row;
-                    local itemLink = data[row].itemLink;
-                    if (itemLink) then
-                        self:onItemDragEditBox(nil, nil, itemLink, self.icon, "ITEM_SELECTED");
-                    end
+        ["OnClick"] = function(_, _, data, row, _, realrow)
+            -- Prevent error from happening when unselected item.
+            if self.hasUserUnselectDuringLock then
+                self.hasUserUnselectDuringLock = false
+                return
+            end
+
+
+            if(self.lastRow ~= realrow and not self.isCurrentlyBidding) then
+                -- Prevent error from happening when the table sort is changed.
+                if( not data[realrow]
+                    or not data[realrow].itemLink
+                    or not data[realrow].cols
+                    or type(data) ~= "table") then
+                    return;
                 end
-            elseif(lastRow == row) then
+
+                self.hasSelectedLoot = true;
+                local itemLink = data[realrow].itemLink;
+                IRT.IRTMasterLoot.itemBeingBiddedOn = itemLink;
+                self:onItemDragEditBox(nil, nil, itemLink, self.icon, "ITEM_SELECTED");
+                self.lastRow = realrow;
+            elseif(self.lastRow == realrow and not self.isCurrentlyBidding) then
                 self:Clear();
-                hasSelectedLoot = false;
-                lastRow = nil;
+                self.hasSelectedLoot = false;
+                self.lastRow = nil;
+                IRT.IRTMasterLoot.itemBeingBiddedOn = nil;
+                if (self.hasUserUnselectDuringLock) then
+                    self.hasUserUnselectDuringLock = false
+                    dropTable.ClearSelection()
+                end 
+             -- Preventing the user from bugging out the UI due to limitation of ScrollingTable.
+            elseif (self.isCurrentlyBidding) then 
+                if(self.hasUserUnselectDuringLock) then
+                    self.hasUserUnselectDuringLock = false;
+                else 
+                    self.hasUserUnselectDuringLock = true;
+                end
             end
         end,
     });
@@ -370,6 +503,11 @@ function IRTMasterLoot:createScrollableFrame(Frame)
         Add items to the scrollframe.
     ]]
     self:updateAwardTable();
+
+    --[[ 
+        Set the start and stop button scripts.
+    ]]
+    IRTMasterLoot:SetStartStopButtonScripts();
 end
 
 --- Update Award Table
@@ -379,13 +517,13 @@ function IRTMasterLoot:updateAwardTable()
         --[[ 
         Add items to the scrollframe.
     ]]
-    data = {}
+    self.data = {}
     for i = 1, GetNumLootItems() do
         local link = GetLootSlotLink(i)
         local lootIcon, lootName, lootQuantity, currencyID, lootQuality, locked, isQuestItem, questID, isActive = GetLootSlotInfo(i)
         if(lootQuality >= 2) then
             local r,g,b,a = IRT.Interface:HexToRGBA(IRT.Data.Constants.Item_Quality[lootQuality].color, 1.0)
-            table.insert(data, 1, {
+            table.insert(self.data, 1, {
                 cols = {
                     {
                         value = string.format("|T%s:0|t %s", lootIcon, lootName),
@@ -402,7 +540,7 @@ function IRTMasterLoot:updateAwardTable()
             })
         end
     end
-    self.Table:SetData(data);
+    self.Table:SetData(self.data);
 end
 
 --- Create Event to handle tooltip
@@ -417,17 +555,17 @@ LootingCorpse:SetScript("OnEvent", function(self, event)
         if(GetLootThreshold() >= 1 and IsInRaid()) then
         end
         IRTMasterLoot:Toggle();
-        openNormally = true;
+        IRTMasterLoot.openNormally = true;
     end
 
     if (event == "LOOT_CLOSED") then
         if (IRTMasterLoot.MasterLootFrame) then
             IRTMasterLoot.MasterLootFrame:Hide();
             IRTMasterLoot:Clear();
-            hasSelectedLoot = false;
-            lastRow = nil;
+            IRTMasterLoot.hasSelectedLoot = false;
+            IRTMasterLoot.lastRow = nil;
             IRTMasterLoot.Table:ClearSelection();
         end
-        openNormally = false;
+        IRTMasterLoot.openNormally = false;
     end
 end)

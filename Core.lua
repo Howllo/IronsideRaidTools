@@ -11,6 +11,7 @@ IRT.GuildRoster = IRT.GuildRoster or C_GuildInfo.GuildRoster()
 IRT.name = addonName
 IRT.version = GetAddOnMetadata(IRT.name, "Version");
 IRT.spaceName = IRT.name:gsub("(%l)(%u)", "%1 %2")
+IRT.ShortName = "IRT"
 IRT.initialized = false;
 IRT.clientUIinterface = 0;
 IRT.clientVersion = 0;

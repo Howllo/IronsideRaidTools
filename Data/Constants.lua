@@ -6,11 +6,6 @@ IRT.Data = IRT.Data or {}
 
 ---@class Constants
 IRT.Data.Constants = {
-    ScrollingTable = {
-        ascending = 1,
-        descending = 2,
-    },
-
     Item_Slot = {
         INVTYPE_AMMO = { 0 },
         INVTYPE_HEAD = { 1 },
@@ -42,6 +37,9 @@ IRT.Data.Constants = {
         INVTYPE_QUIVER = { 20, 21, 22, 23 }
     },
 
+    --[[
+        Also used for loot threshold.
+    ]]
     Item_Quality = {
         [0] = {
             name = "Poor",
