@@ -241,6 +241,7 @@
         "GameTooltip_AddErrorLine",
         "FauxScrollFrame_Update",
         "FauxScrollFrame_OnVerticalScroll",
-        "FauxScrollFrame_GetOffset"
+        "FauxScrollFrame_GetOffset",
+        "ERR_RAID_YOU_JOINED"
     ]
 }

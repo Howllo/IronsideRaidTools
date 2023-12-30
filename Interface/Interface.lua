@@ -86,4 +86,7 @@ OnPartyChange:RegisterEvent("GROUP_LEFT");
 OnPartyChange:RegisterEvent("PLAYER_ENTERING_WORLD");
 OnPartyChange:SetScript("OnEvent", function()
     Interface:UpdatePartyMembers();
+    if(IRT.IRTAward.topBidder) then
+        IRT.IRTAward.topBidder:SetList(Interface.partyMembers);
+    end
 end)

@@ -87,8 +87,8 @@ IRT.Command = IRT.Command or {
         motd = function() IRT.GuildMOTD:Toggle() end,
 
         -- Awards Mapping
-        award = function() IRT.Award:Toggle() end,
-        aw = function() IRT.Award:Toggle() end,
+        award = function() IRT.IRTAward:Toggle() end,
+        aw = function() IRT.IRTAward:Toggle() end,
 
         -- DKP Settings
         dkp = function() IRT.DKPLogger:openMenu(); end,

@@ -107,12 +107,33 @@ IRT.Data.Constants = {
     ]]
     defaultRollTimer = 30,
     defaultRollMessageChannel = "RAID_WARNING",
-    defaultRollType = "roll",
+    defaultRollEndingMessageChannel = "RAID",
+    defaultRollType = "roll", -- Yeah this is not a constant, but it easier to track here. TODO: Change this to DB.
     defaultRollRoll = "roll",
     defaultRollBid = "bid",
-    defaultRollEndBidMessage = function() return string.format("Bidding on %s has ended.", IRT.AwardRoll.itemBeingBiddedOn) end,
     defaultPreMessage = "{star} Ironside:",
-    defaultRollMessage = function(itemLink) return string.format("%s Starting %s on the item %s", IRT.Data.Constants.defaultPreMessage,
-        IRT.Data.Constants.defaultRollType, itemLink) end,
+
+    defaultRollEndBidMessage = function(itemLink) 
+        return  string.format("%s %s on %s has ended.",
+                IRT.Data.Constants.defaultPreMessage,
+                IRT.Data.Constants.defaultRollType,
+                itemLink)
+     end,
+
+    defaultRollCountDownMessage = function(itemLink, time)
+        return  string.format("%s %s on %s will end in %s seconds.", 
+                IRT.Data.Constants.defaultPreMessage,
+                IRT.Data.Constants.defaultRollType,
+                itemLink,
+                tostring(time))
+     end,
+
+    defaultRollMessage = function(itemLink, time)
+        return string.format("%s Starting %s on %s. You have %s seconds to bid.",
+        IRT.Data.Constants.defaultPreMessage,
+        IRT.Data.Constants.defaultRollType, itemLink,
+        time)
+    end,
+
     defaultRollNoteMessage = "/roll 100 for MS, 99 for OS.",
 };
